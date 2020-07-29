@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python3
 '''
 Copyleft ( ) 2009 Celso Junior celsojr2008 at gmail dot com>, 
              2015 Maren Hachmann <marenhachmann@yahoo.com> (updated for Inkscape 0.91)
@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 __version__ = "0.11"
 
-import inkex, simplestyle
+import inkex
 from math import *
 from lxml import etree
 from inkex.paths import Path
@@ -66,37 +66,37 @@ class inkpacking(inkex.Effect):
         self.arg_parser.add_argument("--roto", type=float, default=0) 
 
     def effect(self):
-        docW = self.getUnittouu(self.document.getroot().get('width'))
-        docH = self.getUnittouu(self.document.getroot().get('height'))
-        roto = self.getUnittouu( str(self.options.roto)  + self.options.unit )
-        boxW = self.getUnittouu( str(self.options.width)  + self.options.unit )
-        boxH = self.getUnittouu( str(self.options.height) + self.options.unit )
-        boxD = self.getUnittouu( str(self.options.depth)  + self.options.unit )
-        boxL = self.getUnittouu( str(self.options.tab_proportion)  + self.options.unit )
-        thck = self.getUnittouu( str(self.options.paper_thickness)  + self.options.unit )
-        fingergrepr = self.getUnittouu( str(self.options.fingergrepr)  + self.options.unit ) 
-        gflapsize = self.getUnittouu( str(self.options.clueflapsize)  + self.options.unit )
+        docW = self.svg.unittouu(self.document.getroot().get('width'))
+        docH = self.svg.unittouu(self.document.getroot().get('height'))
+        roto = self.svg.unittouu( str(self.options.roto)  + self.options.unit )
+        boxW = self.svg.unittouu( str(self.options.width)  + self.options.unit )
+        boxH = self.svg.unittouu( str(self.options.height) + self.options.unit )
+        boxD = self.svg.unittouu( str(self.options.depth)  + self.options.unit )
+        boxL = self.svg.unittouu( str(self.options.tab_proportion)  + self.options.unit )
+        thck = self.svg.unittouu( str(self.options.paper_thickness)  + self.options.unit )
+        fingergrepr = self.svg.unittouu( str(self.options.fingergrepr)  + self.options.unit ) 
+        gflapsize = self.svg.unittouu( str(self.options.clueflapsize)  + self.options.unit )
         gflapangle = self.options.clueflapangle
         gfmirror = self.options.clueflapside
         fingergrepa = self.options.fingergrepa
         fingergrepb = self.options.fingergrepb
         gflapangle = 90 - gflapangle
         usetop = self.options.usetop
-        glueflapinoff = self.getUnittouu( str(self.options.glueflapinoff)  + self.options.unit )
-        glueflapin45 = self.getUnittouu( str(self.options.glueflapin45)  + self.options.unit )
-        lockrr = self.getUnittouu( str(self.options.lockroundradius)  + self.options.unit )
+        glueflapinoff = self.svg.unittouu( str(self.options.glueflapinoff)  + self.options.unit )
+        glueflapin45 = self.svg.unittouu( str(self.options.glueflapin45)  + self.options.unit )
+        lockrr = self.svg.unittouu( str(self.options.lockroundradius)  + self.options.unit )
         glueflapinang = self.options.glueflapinang
         glueflapindesl = (( (boxD + boxL) / 2  - glueflapinoff - glueflapin45) /  sin(radians(90 - glueflapinang)) * sin(radians(glueflapinang)))
-        glueflapouoff = self.getUnittouu( str(self.options.glueflapouoff)  + self.options.unit )
-        glueflapou45 = self.getUnittouu( str(self.options.glueflapou45)  + self.options.unit )
+        glueflapouoff = self.svg.unittouu( str(self.options.glueflapouoff)  + self.options.unit )
+        glueflapou45 = self.svg.unittouu( str(self.options.glueflapou45)  + self.options.unit )
         glueflapouang = self.options.glueflapouang
         glueflapoudesl = (( (boxD + boxL) / 2 - glueflapouoff - glueflapou45) /  sin(radians(90 - glueflapouang)) * sin(radians(glueflapouang)))
-        bglueflapinoff = self.getUnittouu( str(self.options.bglueflapinoff)  + self.options.unit )
-        bglueflapin45 = self.getUnittouu( str(self.options.bglueflapin45)  + self.options.unit )
+        bglueflapinoff = self.svg.unittouu( str(self.options.bglueflapinoff)  + self.options.unit )
+        bglueflapin45 = self.svg.unittouu( str(self.options.bglueflapin45)  + self.options.unit )
         bglueflapinang = self.options.bglueflapinang
         bglueflapindesl = (( (boxD + boxL) / 2  - bglueflapinoff - bglueflapin45) /  sin(radians(90 - bglueflapinang)) * sin(radians(bglueflapinang)))
-        bglueflapouoff = self.getUnittouu( str(self.options.bglueflapouoff)  + self.options.unit )
-        bglueflapou45 = self.getUnittouu( str(self.options.bglueflapou45)  + self.options.unit )
+        bglueflapouoff = self.svg.unittouu( str(self.options.bglueflapouoff)  + self.options.unit )
+        bglueflapou45 = self.svg.unittouu( str(self.options.bglueflapou45)  + self.options.unit )
         bglueflapouang = self.options.bglueflapouang
         bglueflapoudesl = (( (boxD + boxL) / 2 - bglueflapouoff - bglueflapou45) /  sin(radians(90 - bglueflapouang)) * sin(radians(bglueflapouang)))
         tpsc = self.options.topscheme
@@ -740,10 +740,6 @@ class inkpacking(inkex.Effect):
 
             line_atts = { 'style':line_style, 'id':box_id+'-botglueflap', 'd':str(Path(line_path)) }
             etree.SubElement(g, inkex.addNS('path','svg'), line_atts )
-            
-    def getUnittouu(self, param):
-        return self.svg.unittouu(param)
-  
+
 if __name__ == '__main__':
-    e = inkpacking()
-    e.run()
+    inkpacking().run()
